@@ -1,0 +1,32 @@
+---
+title: "Untitled"
+author: "Nosequiensoy007"
+date: "9/1/2021"
+output: html_document
+---
+#Introduction
+
+The objective of this assignment is to create a web page using R Markdown that features a map created with Leaflet. The webpage needs to be hosted on either GitHub Pages, RPubs. I chose to host it on RPubs.
+
+#Loading required libraries
+```{r}
+library(leaflet)
+library(dplyr)
+```
+
+##Marking the capitals of the seven states of Northeast India and visualizing their population data
+
+We will use a dataset which has been sourced from the website “https://simplemaps.com/data/mx-cities”. The dataset will be loaded into a dataframe and it will be used to mark the capitals of 32 states of Mexico along with visualization of their population.
+```{r}
+dfcities <- read.csv('mx3.csv')
+dfcities
+##clean info and leave only admin and primary from capitals.
+dfcities<- dfcities[dfcities$capital %in% c("admin","primary"), ]
+dfcities
+```
+We observe that the dataset contains data for the Capitals of the seven states of Northeast India. We proceed for generating the map marking these cities and visualizing their populations with circles.
+
+
+```{r}
+dfcities %>% leaflet() %>% addTiles() %>% addCircles(weight = 1, radius = sqrt(dfcities$population) * 30) %>% addMarkers(lat=dfcities$lat, lng = dfcities$lng, popup=paste(dfcities$city, dfcities$population, sep = ", "))
+```
